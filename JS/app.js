@@ -10,7 +10,8 @@ form.addEventListener('submit', function(e) {
     const productName = document.getElementById('inputProduct').value;
     const category = document.getElementById('inputCategory').value;
 
-    if(!id || !productName || category === 'Selecciona la categoria'){
+    if(!id || !productName || category === 'Selecciona la categoría'){
+        alert('Completa todos los campos');
         return;
     }
     
@@ -25,9 +26,9 @@ form.addEventListener('submit', function(e) {
 function showProducts(filter='Todos') {
     let products = JSON.parse(localStorage.getItem('products')) || [];
     if(filter !== 'Todos'){
-        prodcuts = prodcuts.filter(p => p.category === filter);
+        products = products.filter(p => p.category === filter);
     }
-    tablaBody.innerHTML = ``;
+    tablaBody.innerHTML = '';
 
     products.forEach(p => {
         const row = `
@@ -41,6 +42,13 @@ function showProducts(filter='Todos') {
     });
 }
 
+document.querySelectorAll('[data-filter]').forEach(boton => {
+    boton.addEventListener('click', () => {
+        const categoria = boton.getAttribute('data-filter');
+        showProducts(categoria);
+    });
+});
+
 btnToggle.addEventListener('click', () => {
     if (tablaContainer.style.display === "none") {
         tablaContainer.style.display = "table";
@@ -48,3 +56,5 @@ btnToggle.addEventListener('click', () => {
         tablaContainer.style.display = "none";
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => showProducts());
